@@ -18,6 +18,28 @@ class ProcessarCsv:
         self.df_filtrado = self.df[self.df[coluna] == atributo]
         return self.df_filtrado
 
+    def filtros_por(self, colunas: list, atributos: list):
+        """
+        Função que faz múltiplos filtros ao passar uma lista
+        de colunas e atributos a serem filtrados
+        """
+        if len(colunas) != len(atributos):
+            raise ValueError("Não tem o mesmo número de colunas e atributos")
+
+        if len(colunas) == 0:
+            return self.df
+
+        coluna_atual = colunas[0]
+        atributo_atual = atributos[0]
+
+        df_filtrado = self.df[self.df[coluna_atual] == atributo_atual]
+
+        if len(colunas) == 1:
+            return df_filtrado
+
+        else:
+            return self.filtros_por(colunas[1:], atributos[1:])
+
     def sub_filtra_por(self, coluna: str, atributo: str):
         return self.df_filtrado[self.df_filtrado[coluna] == atributo]
 
@@ -32,3 +54,5 @@ if __name__ == "__main__":
     # print(arquivo_csv.df.columns)
     print(arquivo_csv.filtra_por(coluna="estado", atributo="SP"))
     print(arquivo_csv.sub_filtra_por(coluna="preco", atributo=10.50))
+    print("#############################")
+    print(arquivo_csv.filtros_por(["estado", "preco"], ["SP", 10.5]))
